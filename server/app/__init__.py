@@ -9,3 +9,6 @@ app.config.from_pyfile('../config.py')
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 socketio = SocketIO(app)
+
+from . import models
+from . import views
