@@ -1,0 +1,4 @@
+Flask==0.12.2
+Flask-Migrate==2.1.1
+Flask-SocketIO==2.9.2
+Flask-SQLAlchemy==2.3.2
