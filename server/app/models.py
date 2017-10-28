@@ -38,7 +38,12 @@ class Room(db.Model):
     id = Column(db.Integer, primary_key=True)
     last_log_at = Column(db.DateTime, default=datetime.datetime.utcnow,
                          index=True)
-    logs = db.relationship('ChatLog', backref='room', lazy=True)
+    logs = db.relationship('ChatLog', order_by='desc(ChatLog.id)', 
+                           backref='room', lazy=True)
+
+    @property
+    def last_log(self):
+        return self.logs[0] if len(self.logs) > 0 else None
 
 
 class ChatLog(db.Model):

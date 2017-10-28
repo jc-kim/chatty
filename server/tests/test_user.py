@@ -1,22 +1,7 @@
-import unittest
+from tests import ServerTestCase
 
-from flask_sqlalchemy import SQLAlchemy
 
-from app import create_app, db
-
-class UserTest(unittest.TestCase):
-
-    def setUp(self):
-        self.app = create_app({
-            'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:'
-        })
-        self.test_app = self.app.test_client()
-        with self.app.app_context():
-            db.create_all()
-    
-    def tearDown(self):
-        with self.app.app_context():
-            db.drop_all()
+class UserTest(ServerTestCase):
     
     def test_succeed_register(self):
         rv = self.test_app.post('/register', data={

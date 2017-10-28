@@ -1,0 +1,41 @@
+import json
+
+from app.utils import create_user, make_room
+from tests import ServerTestCase
+
+
+class RoomTest(ServerTestCase):
+
+    def populate_db(self):
+        with self.app.app_context():
+            self.user1 = create_user('user1', 'pass1', 'user1')
+            self.user2 = create_user('user2', 'pass2', 'user2')
+            self.user3 = create_user('user3', 'pass3', 'user3')
+            self.user4 = create_user('user4', 'pass4', 'user4')
+            self.room1_id = make_room(self.user1, self.user2).id
+            self.room2_id = make_room(self.user1, self.user3).id
+            self.room3_id = make_room(self.user2, self.user3).id
+            self.room4_id = make_room(self.user3, self.user4).id
+
+    def login(self, client, username, password):
+        client.post('/login', data={
+            'username': username,
+            'password': password,
+        })
+
+    def setUp(self):
+        super().setUp()
+        self.populate_db()
+
+    def test_room_list(self):
+        self.login(self.test_app, 'user3', 'pass3')
+        rv = json.loads(self.test_app.get('/room/').data)
+        assert len(rv) == 3
+        assert rv[0]['id'] == self.room4_id
+        assert rv[0]['users'] == ['user3', 'user4']
+        assert rv[1]['id'] == self.room3_id
+        assert rv[1]['users'] == ['user2', 'user3']
+
+    def test_failed_room_list(self):
+        rv = self.test_app.get('/room/')
+        assert rv.status_code == 401

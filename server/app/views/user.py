@@ -1,15 +1,12 @@
 from flask import Blueprint, g, jsonify, make_response, request, session
 from flask_login import login_user, logout_user
 
-from .forms import RegisterForm, LoginForm
-from .models import User
-from .utils import create_user, login_check
+from app.forms import RegisterForm, LoginForm
+from app.models import User
+from app.utils import create_user, login_check
+
 
 bp = Blueprint('user', __name__)
-
-
-def set_blueprint(app):
-    app.register_blueprint(bp)
 
 
 @bp.route('/register', methods=['POST'])
