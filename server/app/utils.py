@@ -7,16 +7,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from .models import User
 
-
-def login_required(f):
-    @wraps(f)
-    def func(*args, **kwargs):
-        if getattr(g, 'user', None) is None:
-            return abort(403)
-        return f(*args, **kwargs)
-    return func
-
-
 def create_user(username, password, nickname):
     user = User(username=username,
                 password=generate_password_hash(password),

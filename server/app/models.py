@@ -21,6 +21,18 @@ class User(db.Model):
     rooms = db.relationship('Room', secondary=users_rooms, lazy='subquery',
                             backref=db.backref('users', lazy=True))
 
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.username
+
 
 class Room(db.Model):
     id = Column(db.Integer, primary_key=True)

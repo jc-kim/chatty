@@ -38,7 +38,7 @@ class UserTest(unittest.TestCase):
             'password': '',
             'nickname': '',
         })
-        assert rv.status_code == 200  # TODO: It must be 400
+        assert rv.status_code == 400
 
         rv = self.test_app.post('/register', data={
             'username': 'user1',
@@ -87,4 +87,4 @@ class UserTest(unittest.TestCase):
         rv = self.test_app.post('/logout')
         assert rv.status_code == 200
         rv = self.test_app.post('/logout')
-        assert rv.status_code == 400
+        assert rv.status_code == 200

@@ -1,8 +1,9 @@
 from flask import Blueprint, g, jsonify, make_response, request, session
+from flask_login import login_user, logout_user
 
+from .forms import RegisterForm, LoginForm
 from .models import User
 from .utils import create_user, login_check
-
 
 bp = Blueprint('user', __name__)
 
@@ -11,36 +12,33 @@ def set_blueprint(app):
     app.register_blueprint(bp)
 
 
-@bp.before_request
-def logged_check():
-    setattr(g, 'user', None)
-    user_id: int = session.get('user_id', 0)
-    if user_id > 0:
-        setattr(g, 'user', User.query.get(user_id))
-
-
 @bp.route('/register', methods=['POST'])
 def register():
-    username = request.form.get('username')
-    password = request.form.get('password')
-    nickname = request.form.get('nickname')
+    form = RegisterForm(request.form)
+    if not form.validate():
+        return make_response(jsonify(), 400)
 
     try:
-        user = create_user(username, password, nickname)
+        user = create_user(form.username.data,
+                           form.password.data,
+                           form.nickname.data)
     except Exception as e:
         print(e)
         return make_response(jsonify(), 400)
-    session['user_id'] = user.id
+    login_user(user)
     return make_response(jsonify(), 200)
 
 
 @bp.route('/login', methods=['POST'])
 def login():
-    user = login_check(request.form.get('username'), 
-                          request.form.get('password'))
-    if user is None:
+    form = LoginForm(request.form)
+    if not form.validate():
         return make_response(jsonify(), 400)
-    session['user_id'] = user.id
+    user = login_check(form.username.data, form.password.data)
+
+    if user is None or not login_user(user):
+        return make_response(jsonify(), 400)
+
     return make_response(jsonify({
         'nickname': user.nickname
     }), 200)
@@ -48,5 +46,5 @@ def login():
 
 @bp.route('/logout', methods=['POST'])
 def logout():
-    user_id = session.pop('user_id', None)
-    return make_response(jsonify(), 200 if user_id is not None else 400)
+    logout_user()
+    return make_response(jsonify(), 200)
