@@ -39,3 +39,37 @@ class RoomTest(ServerTestCase):
     def test_failed_room_list(self):
         rv = self.test_app.get('/room/')
         assert rv.status_code == 401
+
+    def test_make_room(self):
+        self.login(self.test_app, 'user1', 'pass1')
+        rv = self.test_app.post('/room/make', data={
+            'usernames': ['user2', 'user3', 'user4'],
+        })
+        assert rv.status_code == 200
+        d = json.loads(rv.data)
+        assert d['room_id'] == 5
+        assert d['users'] == ['user1', 'user2', 'user3', 'user4']
+
+        rv = json.loads(self.test_app.get('/room/').data)
+        assert len(rv) == 3
+        assert rv[0]['id'] == 5
+
+    def test_redirect_make_room(self):
+        self.login(self.test_app, 'user1', 'pass1')
+        rv = self.test_app.post('/room/make', data={
+            'usernames': ['user2'],
+        })
+        assert rv.status_code == 301
+        assert json.loads(rv.data)['room_id'] == 1
+
+    def test_failed_make_room(self):
+        self.login(self.test_app, 'user1', 'pass1')
+        rv = self.test_app.post('/room/make', data={
+            'usernames': ['user1'],
+        })
+        assert rv.status_code == 400  # TODO: Do I need to implement feature chat with myself?
+        
+        rv = self.test_app.post('/room/make', data={
+            'usernames': []
+        })
+        assert rv.status_code == 400
