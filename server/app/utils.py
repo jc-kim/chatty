@@ -3,7 +3,7 @@ from functools import wraps
 from typing import List
 
 from flask import g, abort
-from flask_login import current_user
+from flask_jwt import current_identity
 from flask_socketio import disconnect
 from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -37,7 +37,7 @@ def login_check(username, password) -> User:
 def authenticated_only(f):
     @wraps(f)
     def wrapped(*args, **kwargs):
-        if not current_user.is_authenticated:
+        if not current_identity:
             disconnect()
         else:
             return f(*args, **kwargs)
@@ -80,3 +80,23 @@ def add_chat(user: User, room_id: int, message: str):
         raise Exception('db error')
 
     return new_log
+
+
+def _jwt_authenticate(username, password):
+    user = User.query.filter_by(username=username).scalar()
+    if user and check_password_hash(user.password, password):
+        return user
+
+
+def _jwt_identity(payload):
+    user_id = payload['identity']
+    try:
+        return User.query.get(user_id)
+    except:
+        return None
+
+
+def initialize_jwt(jwt, app):
+    jwt.authentication_handler(_jwt_authenticate)
+    jwt.identity_handler(_jwt_identity)
+    jwt.init_app(app)

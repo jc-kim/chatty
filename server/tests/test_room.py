@@ -18,18 +18,25 @@ class RoomTest(ServerTestCase):
             self.room4_id = make_room(self.user3, self.user4).id
 
     def login(self, client, username, password):
-        client.post('/user/login', data={
+        rv = client.post('/user/login', data=json.dumps({
             'username': username,
             'password': password,
-        })
+        }), content_type='application/json')
+        return json.loads(rv.data)['access_token']
 
     def setUp(self):
         super().setUp()
         self.populate_db()
 
+    def get(self, test_app, url, token=None):
+        return test_app.get(url, headers={'authorization': 'JWT ' + token} if token else None)
+
+    def post(self, test_app, url, data, token=None):
+        return test_app.post(url, data=data, headers={'authorization': 'JWT ' + token} if token else None)
+
     def test_room_list(self):
-        self.login(self.test_app, 'user3', 'pass3')
-        rv = json.loads(self.test_app.get('/room/').data)
+        token = self.login(self.test_app, 'user3', 'pass3')
+        rv = json.loads(self.get(self.test_app, '/room/', token).data)
         assert len(rv) == 3
         assert rv[0]['id'] == self.room4_id
         assert rv[0]['users'] == ['user3', 'user4']
@@ -41,35 +48,35 @@ class RoomTest(ServerTestCase):
         assert rv.status_code == 401
 
     def test_make_room(self):
-        self.login(self.test_app, 'user1', 'pass1')
-        rv = self.test_app.post('/room/make', data={
+        token = self.login(self.test_app, 'user1', 'pass1')
+        rv = self.post(self.test_app, '/room/make', {
             'usernames': ['user2', 'user3', 'user4'],
-        })
+        }, token)
         assert rv.status_code == 200
         d = json.loads(rv.data)
         assert d['room_id'] == 5
         assert d['users'] == ['user1', 'user2', 'user3', 'user4']
 
-        rv = json.loads(self.test_app.get('/room/').data)
+        rv = json.loads(self.get(self.test_app, '/room/', token).data)
         assert len(rv) == 3
         assert rv[0]['id'] == 5
 
     def test_redirect_make_room(self):
-        self.login(self.test_app, 'user1', 'pass1')
-        rv = self.test_app.post('/room/make', data={
+        token = self.login(self.test_app, 'user1', 'pass1')
+        rv = self.post(self.test_app, '/room/make', {
             'usernames': ['user2'],
-        })
+        }, token)
         assert rv.status_code == 301
         assert json.loads(rv.data)['room_id'] == 1
 
     def test_failed_make_room(self):
-        self.login(self.test_app, 'user1', 'pass1')
-        rv = self.test_app.post('/room/make', data={
+        token = self.login(self.test_app, 'user1', 'pass1')
+        rv = self.post(self.test_app, '/room/make', {
             'usernames': ['user1'],
-        })
+        }, token)
         assert rv.status_code == 400  # TODO: Do I need to implement feature chat with myself?
         
-        rv = self.test_app.post('/room/make', data={
+        rv = self.post(self.test_app, '/room/make', {
             'usernames': []
-        })
+        }, token)
         assert rv.status_code == 400

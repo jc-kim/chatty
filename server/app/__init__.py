@@ -1,12 +1,12 @@
 from flask import Flask
-from flask_login import LoginManager
+from flask_jwt import JWT
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-
 db = SQLAlchemy()
 migrate = Migrate()
-login_manager = LoginManager()
+jwt = JWT()
+
 
 def create_app(config=None):
     app = Flask(__name__)
@@ -16,13 +16,13 @@ def create_app(config=None):
 
     db.init_app(app)
     migrate.init_app(app, db)
-    login_manager.init_app(app)
 
     from app.models import User
     from app.views import set_blueprint
+    from app.utils import initialize_jwt
 
     set_blueprint(app)
 
-    login_manager.user_loader(lambda username: User.query.filter_by(username=username).first())
+    initialize_jwt(jwt, app)
 
     return app

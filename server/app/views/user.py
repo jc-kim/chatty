@@ -1,5 +1,5 @@
 from flask import Blueprint, g, jsonify, make_response, request, session
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_jwt import jwt_required, current_identity
 
 from app.forms import RegisterForm, LoginForm
 from app.models import User
@@ -21,36 +21,17 @@ def register():
                            form.nickname.data)
     except Exception as e:
         print(e)
-        return make_response(jsonify(), 400)
-    login_user(user)
-    return make_response(jsonify(), 200)
-
-
-@bp.route('/login', methods=['POST'])
-def login():
-    form = LoginForm(request.form)
-    if not form.validate():
-        return make_response(jsonify(), 400)
-    user = login_check(form.username.data, form.password.data)
-
-    if user is None or not login_user(user):
-        return make_response(jsonify(), 400)
-
-    return make_response(jsonify({
-        'nickname': user.nickname
-    }), 200)
-
-
-@bp.route('/logout', methods=['POST'])
-def logout():
-    logout_user()
+        return make_response(jsonify({
+            'error': str(e),
+        }), 400)
     return make_response(jsonify(), 200)
 
 
 @bp.route('/list', methods=['GET'])
-@login_required
+@jwt_required()
 def user_list():
     return make_response(jsonify([{
         'username': u.username,
         'nickname': u.nickname
-    } for u in User.query.filter(User.username != current_user.username)]), 200)
+    } for u in User.query.filter(User.username != current_identity.username)]),
+    200)

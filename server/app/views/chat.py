@@ -3,7 +3,7 @@ import json
 from typing import List
 
 from flask import request
-from flask_login import current_user
+from flask_jwt import current_identity
 from flask_socketio import emit, send, Namespace, SocketIO
 
 from app.utils import ChatLog, User
@@ -43,7 +43,7 @@ class ChatNamespace(Namespace):
     def on_connect(self):
         if len([s for s in sockets if s.sid == request.sid]) == 0:
             sockets.append(
-                Socket(request.sid, current_user.id, current_user.room_ids)
+                Socket(request.sid, current_identity.id, current_identity.room_ids)
             )
 
     def on_disconnect(self):
@@ -58,14 +58,14 @@ class ChatNamespace(Namespace):
             data = msg
         room_id, message = int(data['room_id']), data['message']
         try:
-            chat = add_chat(current_user, room_id, message)
+            chat = add_chat(current_identity, room_id, message)
         except:
             send(json.dumps({'succeed': False}), json=True)
             return
 
         send(json.dumps({'succeed': True}), json=True)
 
-        [socket.on_receive_message(room_id, current_user, chat) for socket in sockets]
+        [socket.on_receive_message(room_id, current_identity, chat) for socket in sockets]
 
 
 socketio.on_namespace(ChatNamespace('/chat'))
