@@ -1,12 +1,12 @@
 from flask import Blueprint, g, jsonify, make_response, request, session
-from flask_login import login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 
 from app.forms import RegisterForm, LoginForm
 from app.models import User
 from app.utils import create_user, login_check
 
 
-bp = Blueprint('user', __name__)
+bp = Blueprint('user', __name__, url_prefix='/user')
 
 
 @bp.route('/register', methods=['POST'])
@@ -45,3 +45,12 @@ def login():
 def logout():
     logout_user()
     return make_response(jsonify(), 200)
+
+
+@bp.route('/list', methods=['GET'])
+@login_required
+def user_list():
+    return make_response(jsonify([{
+        'username': u.username,
+        'nickname': u.nickname
+    } for u in User.query.filter(User.username != current_user.username)]), 200)

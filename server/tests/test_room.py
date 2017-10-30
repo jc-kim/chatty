@@ -18,7 +18,7 @@ class RoomTest(ServerTestCase):
             self.room4_id = make_room(self.user3, self.user4).id
 
     def login(self, client, username, password):
-        client.post('/login', data={
+        client.post('/user/login', data={
             'username': username,
             'password': password,
         })
