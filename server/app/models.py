@@ -33,6 +33,9 @@ class User(db.Model):
     def get_id(self):
         return self.username
 
+    @property
+    def room_ids(self):
+        return [room.id for room in self.rooms]
 
 class Room(db.Model):
     id = Column(db.Integer, primary_key=True)
@@ -52,3 +55,5 @@ class ChatLog(db.Model):
     writer_id = Column(db.Integer, db.ForeignKey('user.id'))
     message = Column(db.UnicodeText)
     created_at = Column(db.DateTime, default=datetime.datetime.utcnow)
+
+    writer = db.relationship('User')

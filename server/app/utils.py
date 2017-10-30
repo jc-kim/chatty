@@ -1,3 +1,4 @@
+import datetime
 from functools import wraps
 from typing import List
 
@@ -8,7 +9,8 @@ from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from . import db
-from .models import User, Room
+from .models import ChatLog, Room, User
+
 
 def create_user(username, password, nickname):
     user = User(username=username,
@@ -20,7 +22,6 @@ def create_user(username, password, nickname):
         return user
     except exc.SQLAlchemyError as e:
         db.session.rollback()
-        print(e)
         raise Exception('db error') # TODO
 
 
@@ -49,5 +50,33 @@ def make_room(*users: List[User]) -> Room:
         db.session.add(room)
         db.session.commit()
     except exc.SQLAlchemyError:
+        db.session.rollback()
         raise Exception('db error')  # TODO
     return room
+
+
+def add_chat(user: User, room_id: int, message: str):
+    if user is None:
+        raise Exception('invalid input')  # TODO
+    try:
+        room: Room = Room.query.get(room_id)
+    except exc.SQLAlchemyError:
+        raise Exception('invalid input')
+    
+    if room not in user.rooms:
+        raise Exception('invalid input')
+    
+    if len(message) <= 0:
+        raise Exception('invalid input')
+    
+    new_log = ChatLog(writer=user, message=message,
+                      created_at=datetime.datetime.utcnow())
+    room.logs.append(new_log)
+    room.last_log_at = new_log.created_at
+    try:
+        db.session.commit()
+    except exc.SQLAlchemyError:
+        db.session.rollback()
+        raise Exception('db error')
+
+    return new_log
