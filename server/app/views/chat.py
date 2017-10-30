@@ -21,18 +21,19 @@ class Socket:
         self.rooms = rooms
     
     def emit(self, event, data):
-        socketio.emit(event, data, room=self.sid)
+        socketio.emit(event, data, room=self.sid, namespace='/chat', json=True)
 
     def on_receive_message(self, room_id: int, writer: User, chat: ChatLog):
-        self.emit('receive_message', json.dumps({
-            'room_id': room_id,
-            'writer': {
-                'username': writer.username,
-                'nickname': writer.nickname,
-            },
-            'message': chat.message,
-            'created_at': chat.created_at.timestamp(),
-        }))
+        if room_id in self.rooms:
+            self.emit('receive_message', {
+                'room_id': room_id,
+                'writer': {
+                    'username': writer.username,
+                    'nickname': writer.nickname,
+                },
+                'message': chat.message,
+                'created_at': chat.created_at.timestamp(),
+            })
 
 
 sockets: List[Socket] = []
