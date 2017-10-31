@@ -1,0 +1,15 @@
+<div class="container">
+    <h1>Chatty</h1>
+    <form class="form">
+        <mat-form-field>
+            <input matInput placeholder="아이디" [(ngModel)]="model.username" name="username">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="password" placeholder="비밀번호" [(ngModel)]="model.password" name="password">
+        </mat-form-field>
+        <div class="cmds">
+            <button mat-raised-button color="primary" (click)="login()">로그인</button>
+            <span>또는 지금 <a href="#">가입하기</a></span>
+        </div>
+    </form>
+</div>
