@@ -1,0 +1,21 @@
+.mat-form-field {
+    width: 100%;
+}
+
+.container h1,
+.container h2 {
+    text-align: center;
+}
+
+.form {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    min-width: 15rem;
+    max-width: 50rem;
+}
+
+.cmds {
+    text-align: center;
+}

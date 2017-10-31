@@ -1,15 +1,18 @@
 <div class="container">
     <h1>Chatty</h1>
-    <form routerLink="/login" class="form" method="post" (ngSubmit)='login();'>
+    <h2>Register</h2>
+    <form class="form" (ngSubmit)='register();'>
         <mat-form-field>
             <input matInput placeholder="아이디" [(ngModel)]="model.username" name="username">
         </mat-form-field>
         <mat-form-field>
             <input matInput type="password" placeholder="비밀번호" [(ngModel)]="model.password" name="password">
         </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="닉네임" [(ngModel)]="model.nickname" name="nickname">
+        </mat-form-field>
         <div class="cmds">
-            <button mat-raised-button color="primary" type="submit">로그인</button>
-            <span>또는 지금 <button mat-button routerLink="/register">가입하기</button></span>
+            <button mat-raised-button color="primary" type="submit">회원 가입</button><span>이미 아이디가 있다면 <button mat-button routerLink="/login">로그인</button></span>
         </div>
     </form>
 </div>

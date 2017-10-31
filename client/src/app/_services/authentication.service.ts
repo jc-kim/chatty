@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Headers, Response } from '@angular/http';
+import { AppSetting } from '../app.settings';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -8,10 +9,10 @@ export class AuthenticationService {
   constructor(private http: Http) { }
 
   login(username: string, password: string) {
-    return this.http.post('/user/login', JSON.stringify({
+    return this.http.post(`${AppSetting.API_ENDPOINT}/user/login`, {
       'username': username,
       'password': password
-    })).map((response: Response) => {
+    }).map((response: Response) => {
       const res = response.json();
       if (res && res.access_token) {
         localStorage.setItem('access_token', res.access_token);
@@ -24,10 +25,12 @@ export class AuthenticationService {
   }
 
   register(username: string, password: string, nickname: string) {
-    return this.http.post('/user/register', JSON.stringify({
-      'username': username,
-      'password': password,
-      'nickname': nickname
-    }));
+    const headers = new Headers({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+    return this.http.post(`${AppSetting.API_ENDPOINT}/user/register`,
+      `username=${username}&password=${password}&nickname=${nickname}`, {
+      headers: headers
+    });
   }
 }
