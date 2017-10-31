@@ -1,0 +1,23 @@
+.container {
+    height: 100vh;
+}
+
+.head {
+    height: 15vh;
+    border-bottom: 1px solid black;
+    box-sizing: border-box;
+}
+
+.body {
+    height: 85vh;
+    display: flex;
+}
+
+.room-list {
+    width: 30rem;
+    border-right: 1px solid black;
+}
+
+.chat-window {
+    flex: 1;
+}

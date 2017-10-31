@@ -18,7 +18,7 @@ def room_list():
             'id': room.id,
             'users': [u.nickname for u in room.users],
             'last_log': last_log and last_log.message,
-            'last_log_at': room.last_log_at.timestamp(),
+            'last_log_at': room.last_log_at.timestamp() * 1000,
         })
     result.sort(key=lambda d: -d['last_log_at'])
     return jsonify(result)
@@ -52,5 +52,5 @@ def _make_room():
     return make_response(jsonify({
         'room_id': room.id,
         'users': [u.nickname for u in room.users],
-        'created_at': room.last_log_at,
+        'created_at': room.last_log_at.timestamp() * 1000,
     }), 200)

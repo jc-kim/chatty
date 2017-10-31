@@ -1,14 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Headers } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+
 import { SocketService } from './socket.service';
 import { Room } from '../_models/room';
 import { Chat } from '../_models/chat';
+import { AppSetting } from '../app.settings';
 
 @Injectable()
 export class ChatService {
-  private rooms: Room[];
+  public rooms: Room[];
   private cur_room: Room;
 
   constructor(private http: Http, private socket: SocketService) {
+  }
+
+  getRoomList() {
+    const token = localStorage.getItem('access_token');
+    const headers = new Headers();
+    headers.set('Authorization', 'JWT ' + token);
+    return this.http.get(`${AppSetting.API_ENDPOINT}/room/`, {
+      headers: headers
+    }).toPromise()
+    .then(data => {
+      console.log(data.json());
+      this.rooms = data.json().map(r => new Room(r.id, r.users, r.last_log, r.last_log_at));
+      return this.rooms;
+    });
+  }
+
+  changeRoom(room: Room) {
+    this.cur_room = room;
   }
 }

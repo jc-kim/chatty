@@ -1,11 +1,9 @@
 import { Chat } from './chat';
 
 export class Room {
-  public id: number;
-  public usernames: string[];
-  public last_log: string;
-  public last_log_at: Date;
   public logs: Chat[] = [];
+
+  constructor(public id: number, public users: string[], public last_log: string, public last_log_at: number) { }
 
   addChat(newChat: Chat) {
     this.logs.push(newChat);

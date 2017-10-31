@@ -8,18 +8,25 @@ import { MatFormFieldModule, MatInputModule, MatButtonModule } from '@angular/ma
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { AuthenticationService } from './_services/authentication.service';
+import { ChatService } from './_services/chat.service';
 import { SocketService } from './_services/socket.service';
 import { routing } from './app.routing';
 import { HomeComponent } from './home/home.component';
 import { AuthOnly } from './auth';
 import { RegisterComponent } from './register/register.component';
+import { RoomListComponent } from './room-list/room-list.component';
+import { RoomComponent } from './room/room.component';
+import { ChatWindowComponent } from './chat-window/chat-window.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
-    RegisterComponent
+    RegisterComponent,
+    RoomListComponent,
+    RoomComponent,
+    ChatWindowComponent
   ],
   imports: [
     BrowserModule,
@@ -34,6 +41,7 @@ import { RegisterComponent } from './register/register.component';
   providers: [
     AuthenticationService,
     AuthOnly,
+    ChatService,
     SocketService
   ],
   bootstrap: [AppComponent]

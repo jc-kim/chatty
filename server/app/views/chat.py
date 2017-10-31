@@ -32,7 +32,7 @@ class Socket:
                     'nickname': writer.nickname,
                 },
                 'message': chat.message,
-                'created_at': chat.created_at.timestamp(),
+                'created_at': chat.created_at.timestamp() * 1000,
             })
 
 
