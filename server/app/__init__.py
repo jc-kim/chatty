@@ -1,7 +1,9 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_jwt import JWT
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -16,6 +18,7 @@ def create_app(config=None):
 
     db.init_app(app)
     migrate.init_app(app, db)
+    CORS(app)
 
     from app.models import User
     from app.views import set_blueprint
