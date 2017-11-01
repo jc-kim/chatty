@@ -2,8 +2,9 @@ import datetime
 from functools import wraps
 from typing import List
 
-from flask import g, abort, jsonify, _request_ctx_stack
+from flask import request, g, abort, jsonify, _request_ctx_stack
 from flask_jwt import _jwt, current_identity
+from flask_jwt import jwt
 from flask_socketio import disconnect
 from sqlalchemy import exc
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -37,12 +38,13 @@ def login_check(username, password) -> User:
 def authenticated_only(f):
     @wraps(f)
     def wrapped(*args, **kwargs):
-        token = _jwt.request_callback()
+        token = request.args.get('token')
 
         if token is None:
             disconnect()
 
         try:
+            print(token)
             payload = _jwt.jwt_decode_callback(token)
         except jwt.InvalidTokenError as e:
             disconnect()

@@ -1,11 +1,15 @@
 @import "talk-bubble.css";
 p.nickname {
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 0.5rem;
     font-weight: bold;
 }
 
 .talk-bubble {
+    margin: 0 0 0 1.5rem;
+}
+
+.talk-bubble.mine {
     margin: 0 1.5rem 0 0;
 }
 

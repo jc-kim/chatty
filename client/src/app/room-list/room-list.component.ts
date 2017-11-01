@@ -9,14 +9,10 @@ import { Room } from '../_models/room';
   styleUrls: ['./room-list.component.css']
 })
 export class RoomListComponent implements OnInit {
-  rooms: Room[];
   constructor(private chat: ChatService) { }
 
   ngOnInit() {
-    this.chat.getRoomList().then(rooms => {
-      console.log(rooms);
-      this.rooms = rooms;
-    });
+    this.chat.getRoomList();
   }
 
 }

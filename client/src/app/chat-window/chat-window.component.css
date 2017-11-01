@@ -17,6 +17,15 @@
     line-height: 2rem;
 }
 
+.chat-window {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-list-container {
+    flex-grow: 1;
+}
+
 .chat-list {
     list-style: none;
     margin: 0;

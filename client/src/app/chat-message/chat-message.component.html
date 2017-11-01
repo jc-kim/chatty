@@ -4,7 +4,7 @@
         <p class="nickname" [innerHTML]="chat.nickname" *ngIf="!isMine"></p>
         <div class="bubble-container">
             <p class="date mine" *ngIf="isMine">{{ chat.created_at | date:'short' }}</p>
-            <div class="talk-bubble round tri-right right-top" [class.mine]="isMine">
+            <div class="talk-bubble round tri-right" [class.right-top]="isMine" [class.left-top]="!isMine" [class.mine]="isMine">
                 <div class="talktext">
                     <p>
                         {{chat.message}}

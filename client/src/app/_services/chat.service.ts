@@ -12,8 +12,17 @@ import { AppSetting } from '../app.settings';
 export class ChatService {
   public rooms: Room[];
   private cur_room: Room;
+  private connection;
 
   constructor(private http: Http, private socket: SocketService) {
+    this.connection = this.socket.connect().subscribe(data => {
+      this.cur_room.addChat({
+        'username': data['writer']['username'],
+        'nickname': data['writer']['nickname'],
+        'message': data['message'],
+        'created_at': data['created_at']
+      });
+    });
   }
 
   getRoomList() {
@@ -24,7 +33,6 @@ export class ChatService {
       headers: headers
     }).toPromise()
     .then(data => {
-      console.log(data.json());
       this.rooms = data.json().map(r => new Room(r.id, r.users, r.last_log, r.last_log_at));
       return this.rooms;
     });
@@ -38,7 +46,11 @@ export class ChatService {
     this.http.get(`${AppSetting.API_ENDPOINT}/room/${this.cur_room.id}/logs`, {
       headers: headers
     }).subscribe(data => {
-      this.cur_room.addChatList(data.json());
+      this.cur_room.replaceChatList(data.json());
     });
+  }
+
+  addChat(message: string) {
+    this.socket.send_message(this.cur_room.id, message);
   }
 }

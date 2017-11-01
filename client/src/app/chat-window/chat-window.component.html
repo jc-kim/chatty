@@ -1,10 +1,13 @@
 <div class="container">
     <div *ngIf="chat.cur_room;else emptyChatWindow">
-        <ul class="chat-list">
-            <li *ngFor="let chat of chat.cur_room.logs">
-                <app-chat-message [chat]="chat" [isMine]="chat.nickname === nickname"></app-chat-message>
-            </li>
-        </ul>
+        <div class="chat-list-container">
+            <ul class="chat-list">
+                <li *ngFor="let chat of chat.cur_room.logs">
+                    <app-chat-message [chat]="chat" [isMine]="chat.nickname === nickname"></app-chat-message>
+                </li>
+            </ul>
+        </div>
+        <app-add-message-box></app-add-message-box>
     </div>
     <ng-template #emptyChatWindow>
         <div class="chat-window-empty">

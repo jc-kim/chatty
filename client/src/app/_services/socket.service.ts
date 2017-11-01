@@ -32,7 +32,9 @@ export class SocketService {
 
     const observable = new Observable(observer => {
       this.socket = io(this.url, {
-        query: `token=${this.access_token()}`
+        query: {
+          token: this.access_token()
+        }
       });
       this.socket.on('receive_message', (data) => {
         observer.next(data);
