@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { AppSetting } from '../app.settings';
+import { ChatService } from '../_services/chat.service';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AuthenticationService {
 
-  constructor(private http: Http) { }
+  constructor(private http: Http, private chat: ChatService) { }
 
   login(username: string, password: string) {
     return this.http.post(`${AppSetting.API_ENDPOINT}/user/login`, {
@@ -18,6 +19,7 @@ export class AuthenticationService {
         localStorage.setItem('access_token', res.access_token);
         localStorage.setItem('username', res.username);
         localStorage.setItem('nickname', res.nickname);
+        this.chat.establishSocketConnect();
       }
     });
   }

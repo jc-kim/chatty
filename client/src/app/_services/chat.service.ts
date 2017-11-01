@@ -14,14 +14,21 @@ export class ChatService {
   private connection;
 
   constructor(private http: Http, private socket: SocketService) {
+    if (localStorage.getItem('access_token')) {
+      this.establishSocketConnect();
+    }
+  }
+
+  establishSocketConnect() {
     this.connection = this.socket.connect().subscribe(data => {
-      const room: Room = this.findRoomById(data['room_id']) ||
-        new Room(data['room_id'],
-                 [localStorage.getItem('nickname'), data['writer']['nickname']],
-                 data['message'],
-                 data['created_at']
-      );
-      this.rooms.unshift(room);
+      let room: Room = this.findRoomById(data['room_id']);
+      if (!room) {
+        room = new Room(data['room_id'],
+          [localStorage.getItem('nickname'), data['writer']['nickname']],
+          data['message'],
+          data['created_at']);
+        this.rooms.unshift(room);
+      }
       room.addChat({
         'username': data['writer']['username'],
         'nickname': data['writer']['nickname'],
