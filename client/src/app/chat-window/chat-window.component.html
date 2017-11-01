@@ -1,6 +1,6 @@
 <div class="container">
     <div *ngIf="chat.cur_room;else emptyChatWindow">
-        <div class="chat-list-container">
+        <div #chatList class="chat-list-container">
             <ul class="chat-list">
                 <li *ngFor="let chat of chat.cur_room.logs">
                     <app-chat-message [chat]="chat" [isMine]="chat.nickname === nickname"></app-chat-message>

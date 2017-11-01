@@ -24,6 +24,8 @@
 
 .chat-list-container {
     flex-grow: 1;
+    max-height: 70vh;
+    overflow-y: scroll;
 }
 
 .chat-list {
