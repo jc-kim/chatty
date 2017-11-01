@@ -21,6 +21,8 @@ import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { AddMessageBoxComponent } from './add-message-box/add-message-box.component';
 import { NewRoomDialogComponent } from './new-room-dialog/new-room-dialog.component';
 import { LocalDatePipe } from './_pipes/local-date.pipe';
+import { AutoLinkPipe } from './_pipes/auto-link.pipe';
+import { SanitizePipe } from './_pipes/sanitize.pipe';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { LocalDatePipe } from './_pipes/local-date.pipe';
     ChatMessageComponent,
     AddMessageBoxComponent,
     NewRoomDialogComponent,
-    LocalDatePipe
+    LocalDatePipe,
+    AutoLinkPipe,
+    SanitizePipe
   ],
   imports: [
     BrowserModule,
