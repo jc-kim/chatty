@@ -22,8 +22,9 @@ export class Room {
 
   _sortLog() {
     this.logs.sort((a, b) => a.created_at > b.created_at ? 1 : -1);
-    this.last_log = this.logs[this.logs.length - 1].message;
-    this.last_log_at = this.logs[this.logs.length - 1].created_at;
-
+    if (this.logs && this.logs.length >= 1) {
+      this.last_log = this.logs[this.logs.length - 1].message;
+      this.last_log_at = this.logs[this.logs.length - 1].created_at;
+    }
   }
 }

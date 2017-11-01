@@ -21,7 +21,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   }
 
   scrollToBottom() {
-    if (this.chatListElem){
+    if (this.chatListElem) {
       this.chatListElem.nativeElement.scrollTop = this.chatListElem.nativeElement.scrollHeight;
     }
   }

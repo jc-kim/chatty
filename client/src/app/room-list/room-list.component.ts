@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { ChatService } from '../_services/chat.service';
+import { NewRoomDialogComponent } from '../new-room-dialog/new-room-dialog.component';
 
 import { Room } from '../_models/room';
 
@@ -9,10 +11,20 @@ import { Room } from '../_models/room';
   styleUrls: ['./room-list.component.css']
 })
 export class RoomListComponent implements OnInit {
-  constructor(private chat: ChatService) { }
+  constructor(private chat: ChatService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.chat.getRoomList();
   }
 
+  openNewRoomDialog() {
+    const dialogRef = this.dialog.open(NewRoomDialogComponent, {
+      width: '30em',
+      data: { usernames: '' } // TODO: prepare multi user chat
+    });
+    dialogRef.afterClosed().subscribe(data => {
+      console.log(data);
+      this.chat.makeRoom([data]);
+    });
+  }
 }

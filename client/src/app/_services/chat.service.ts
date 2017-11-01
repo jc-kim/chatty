@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { Headers } from '@angular/http';
+import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { SocketService } from './socket.service';
@@ -52,5 +51,28 @@ export class ChatService {
 
   addChat(message: string) {
     this.socket.send_message(this.cur_room.id, message);
+    this.rooms.sort((a, b) => a.last_log_at > b.last_log_at ? 1 : -1);
+  }
+
+  makeRoom(usernames: string[]) {
+    const token = localStorage.getItem('access_token');
+    const headers = new Headers();
+    headers.set('Authorization', 'JWT ' + token);
+    headers.set('Content-Type', 'application/x-www-form-urlencoded')
+    return this.http.post(`${AppSetting.API_ENDPOINT}/room/make`,
+    `usernames=${usernames}`, {
+      headers: headers
+    }).map(res => res.json())
+    .subscribe(data => {
+      const res = data.json();
+      this.rooms.unshift(new Room(res['room_id'], res['users'], '', res['created_at']));
+      this.changeRoom(this.rooms[0]);
+    }, (err: Response) => {
+      if (err.status === 301) {
+        this.changeRoom(this.rooms.filter(r => r.id === err.json()['room_id'])[0]);
+      } else {
+        return err;
+      }
+    });
   }
 }

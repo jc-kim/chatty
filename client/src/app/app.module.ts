@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
-import { MatFormFieldModule, MatInputModule, MatButtonModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule, MatRadioModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -19,6 +19,7 @@ import { RoomComponent } from './room/room.component';
 import { ChatWindowComponent } from './chat-window/chat-window.component';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { AddMessageBoxComponent } from './add-message-box/add-message-box.component';
+import { NewRoomDialogComponent } from './new-room-dialog/new-room-dialog.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { AddMessageBoxComponent } from './add-message-box/add-message-box.compon
     RoomComponent,
     ChatWindowComponent,
     ChatMessageComponent,
-    AddMessageBoxComponent
+    AddMessageBoxComponent,
+    NewRoomDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -38,9 +40,11 @@ import { AddMessageBoxComponent } from './add-message-box/add-message-box.compon
     FormsModule,
     HttpModule,
     routing,
+    MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatRadioModule
   ],
   providers: [
     AuthenticationService,
@@ -48,6 +52,9 @@ import { AddMessageBoxComponent } from './add-message-box/add-message-box.compon
     ChatService,
     SocketService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    NewRoomDialogComponent
+  ]
 })
 export class AppModule { }

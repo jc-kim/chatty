@@ -18,4 +18,9 @@ export class RoomComponent implements OnInit {
   select() {
     this.chat.changeRoom(this.room);
   }
+
+  roomName() {
+    const myNick = localStorage.getItem('nickname');
+    return this.room.users.filter((u) => u !== myNick).join(',');
+  }
 }

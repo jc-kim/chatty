@@ -8,3 +8,9 @@ li {
     margin: 0;
     padding: 0;
 }
+
+.new-room {
+    position: absolute;
+    bottom: 1em;
+    left: 1em;
+}

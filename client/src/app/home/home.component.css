@@ -2,7 +2,7 @@
     height: 100vh;
 }
 
-.head {
+.header {
     height: 15vh;
     border-bottom: 1px solid black;
     box-sizing: border-box;
