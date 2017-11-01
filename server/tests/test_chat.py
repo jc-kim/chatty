@@ -34,15 +34,9 @@ class ChatTestCase(ServerTestCase):
         token1 = self.login('user1', 'pass1')
         token2 = self.login('user2', 'pass2')
         token3 = self.login('user3', 'pass3')
-        client1 = socketio.test_client(self.app, namespace='/chat', headers={
-            'Authorization': 'JWT ' + token1
-        })
-        client2 = socketio.test_client(self.app, namespace='/chat', headers={
-            'Authorization': 'JWT ' + token2
-        })
-        client3 = socketio.test_client(self.app, namespace='/chat', headers={
-            'Authorization': 'JWT ' + token3
-        })
+        client1 = socketio.test_client(self.app, namespace='/chat', query_string='token=' + token1)
+        client2 = socketio.test_client(self.app, namespace='/chat', query_string='token=' + token2)
+        client3 = socketio.test_client(self.app, namespace='/chat', query_string='token=' + token3)
 
         client1.get_received('/chat')
         client1.emit('send_message', {'room_id': 1, 'message': 'message1'}, namespace='/chat')

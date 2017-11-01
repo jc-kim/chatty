@@ -2,10 +2,10 @@
 ## Start
 ```
 pip install -r requirements.txt
-flask db upgrade
-py run.py
+flask db upgrade  # Before do this, you must set FLASK_APP environment variable to run.py, and modify config.py
+python run.py
 ```
 ## Test
 ```
-python -m pytest tests
+pytest
 ```
