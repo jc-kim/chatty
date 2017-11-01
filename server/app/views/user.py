@@ -27,6 +27,15 @@ def register():
     return make_response(jsonify(), 200)
 
 
+@bp.route('/my')
+@jwt_required()
+def my_info():
+    return make_response(jsonify({
+        'username': current_identity.username,
+        'nickname': current_identity.nickname
+    }))
+
+
 @bp.route('/list', methods=['GET'])
 @jwt_required()
 def user_list():

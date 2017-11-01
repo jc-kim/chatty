@@ -17,6 +17,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     localStorage.removeItem('access_token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('nickname');
     this.socket.disconnect();
   }
 

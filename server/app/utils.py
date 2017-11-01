@@ -2,7 +2,7 @@ import datetime
 from functools import wraps
 from typing import List
 
-from flask import g, abort, _request_ctx_stack
+from flask import g, abort, jsonify, _request_ctx_stack
 from flask_jwt import _jwt, current_identity
 from flask_socketio import disconnect
 from sqlalchemy import exc
@@ -107,8 +107,16 @@ def _jwt_identity(payload):
     except:
         return None
 
+def _jwt_auth_response_handler(access_token, identity):
+    return jsonify({
+        'access_token': access_token.decode('utf-8'),
+        'username': identity.username,
+        'nickname': identity.nickname
+    })
+
 
 def initialize_jwt(jwt, app):
     jwt.authentication_handler(_jwt_authenticate)
     jwt.identity_handler(_jwt_identity)
+    jwt.auth_response_handler(_jwt_auth_response_handler)
     jwt.init_app(app)

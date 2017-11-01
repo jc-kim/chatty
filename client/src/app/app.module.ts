@@ -17,6 +17,7 @@ import { RegisterComponent } from './register/register.component';
 import { RoomListComponent } from './room-list/room-list.component';
 import { RoomComponent } from './room/room.component';
 import { ChatWindowComponent } from './chat-window/chat-window.component';
+import { ChatMessageComponent } from './chat-message/chat-message.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ChatWindowComponent } from './chat-window/chat-window.component';
     RegisterComponent,
     RoomListComponent,
     RoomComponent,
-    ChatWindowComponent
+    ChatWindowComponent,
+    ChatMessageComponent
   ],
   imports: [
     BrowserModule,

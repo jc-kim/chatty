@@ -51,7 +51,9 @@ class UserTest(ServerTestCase):
             'username': 'user1',
             'password': 'pass1',
         }), content_type='application/json')
-        rv.status_code == 200
+        assert rv.status_code == 200
+        assert json.loads(rv.data)['username'] == 'user1'
+        assert json.loads(rv.data)['nickname'] == 'nick1'
     
     def test_failed_login(self):
         self.test_app.post('/user/register', data={

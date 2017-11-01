@@ -31,6 +31,14 @@ export class ChatService {
   }
 
   changeRoom(room: Room) {
+    const token = localStorage.getItem('access_token');
+    const headers = new Headers();
+    headers.set('Authorization', 'JWT ' + token);
     this.cur_room = room;
+    this.http.get(`${AppSetting.API_ENDPOINT}/room/${this.cur_room.id}/logs`, {
+      headers: headers
+    }).subscribe(data => {
+      this.cur_room.addChatList(data.json());
+    });
   }
 }

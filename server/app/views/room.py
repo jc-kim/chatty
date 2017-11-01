@@ -54,3 +54,22 @@ def _make_room():
         'users': [u.nickname for u in room.users],
         'created_at': room.last_log_at.timestamp() * 1000,
     }), 200)
+
+
+@bp.route('/<int:room_id>/logs')
+@jwt_required()
+def get_logs(room_id):
+    try:
+        room = Room.query.get(room_id)
+    except:
+        return make_response(jsonify(), 400)
+    if current_identity not in room.users:
+        return make_response(jsonify(), 401)
+
+    return make_response(jsonify([
+        {'username': log.writer.username,
+         'nickname': log.writer.nickname,
+         'message': log.message,
+         'created_at': log.created_at.timestamp() * 1000
+        } for log in room.logs
+    ]))

@@ -1,6 +1,6 @@
 import json
 
-from app.utils import create_user, make_room
+from app.utils import add_chat, create_user, make_room
 from tests import ServerTestCase
 
 
@@ -80,3 +80,15 @@ class RoomTest(ServerTestCase):
             'usernames': []
         }, token)
         assert rv.status_code == 400
+    
+    def test_get_chat_log(self):
+        with self.app.app_context():
+            add_chat(self.user1, self.room1_id, 'message1')
+            add_chat(self.user1, self.room1_id, 'message2')
+            add_chat(self.user2, self.room1_id, 'message3')
+            add_chat(self.user3, self.room2_id, 'message4')
+        token = self.login(self.test_app, 'user1', 'pass1')
+        rv = self.get(self.test_app, f'/room/{self.room1_id}/logs', token)
+        assert rv.status_code == 400
+        assert len(json.loads(rv.data)) == 3
+        assert json.loads(rv.data)[0]['message'] == 'message3'

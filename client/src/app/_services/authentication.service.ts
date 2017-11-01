@@ -16,6 +16,8 @@ export class AuthenticationService {
       const res = response.json();
       if (res && res.access_token) {
         localStorage.setItem('access_token', res.access_token);
+        localStorage.setItem('username', res.username);
+        localStorage.setItem('nickname', res.nickname);
       }
     });
   }

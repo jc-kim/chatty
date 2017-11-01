@@ -1,0 +1,28 @@
+.container {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.chat-window-empty {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-items: center;
+}
+
+.chat-window-empty h3 {
+    width: 100%;
+    text-align: center;
+    line-height: 2rem;
+}
+
+.chat-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.chat-list li {
+    margin: 0 0 1rem 0;
+}

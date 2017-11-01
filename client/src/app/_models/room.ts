@@ -11,7 +11,7 @@ export class Room {
   }
 
   addChatList(newChats: Chat[]) {
-    this.logs.concat(newChats);
+    this.logs = this.logs.concat(newChats);
     this.logs.sort((a, b) => a.created_at > b.created_at ? 1 : -1);
   }
 }

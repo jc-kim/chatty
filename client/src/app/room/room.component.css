@@ -8,8 +8,12 @@
     padding-left: 5em;
 }
 
-.room.selected {
+.room:hover {
     background-color: rgb(212, 212, 212);
+}
+
+.room.selected {
+    background-color: lightblue;
 }
 
 .room>div {
