@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, make_response, request
 from flask_jwt import jwt_required, current_identity
 
 from app.models import ChatLog, Room, User
-from app.utils import make_room
+from app.utils import make_room, update_room_in_sockets
 
 
 bp = Blueprint('room', __name__, url_prefix='/room')
@@ -48,6 +48,7 @@ def _make_room():
         return make_response(jsonify(), 500)  # TODO
 
     #  TODO: send signal to invited users(or not?)
+    update_room_in_sockets(room)
 
     return make_response(jsonify({
         'room_id': room.id,

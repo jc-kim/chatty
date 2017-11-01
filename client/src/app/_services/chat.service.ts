@@ -15,13 +15,25 @@ export class ChatService {
 
   constructor(private http: Http, private socket: SocketService) {
     this.connection = this.socket.connect().subscribe(data => {
-      this.cur_room.addChat({
+      const room: Room = this.findRoomById(data['room_id']) ||
+        new Room(data['room_id'],
+                 [localStorage.getItem('nickname'), data['writer']['nickname']],
+                 data['message'],
+                 data['created_at']
+      );
+      this.rooms.unshift(room);
+      room.addChat({
         'username': data['writer']['username'],
         'nickname': data['writer']['nickname'],
         'message': data['message'],
         'created_at': data['created_at']
       });
+      this.rooms.sort((a, b) => a.last_log_at > b.last_log_at ? -1 : 1);
     });
+  }
+
+  findRoomById(room_id: number) {
+    return this.rooms.filter(r => r.id === room_id)[0];
   }
 
   getRoomList() {
@@ -30,9 +42,10 @@ export class ChatService {
     headers.set('Authorization', 'JWT ' + token);
     return this.http.get(`${AppSetting.API_ENDPOINT}/room/`, {
       headers: headers
-    }).toPromise()
-    .then(data => {
-      this.rooms = data.json().map(r => new Room(r.id, r.users, r.last_log, r.last_log_at));
+    })
+    .map(data => data.json())
+    .subscribe(data => {
+      this.rooms = data.map(r => new Room(r.id, r.users, r.last_log, r.last_log_at));
       return this.rooms;
     });
   }
@@ -51,7 +64,6 @@ export class ChatService {
 
   addChat(message: string) {
     this.socket.send_message(this.cur_room.id, message);
-    this.rooms.sort((a, b) => a.last_log_at > b.last_log_at ? 1 : -1);
   }
 
   makeRoom(usernames: string[]) {
@@ -62,14 +74,14 @@ export class ChatService {
     return this.http.post(`${AppSetting.API_ENDPOINT}/room/make`,
     `usernames=${usernames}`, {
       headers: headers
-    }).map(res => res.json())
+    })
+    .map(res => res.json())
     .subscribe(data => {
-      const res = data.json();
-      this.rooms.unshift(new Room(res['room_id'], res['users'], '', res['created_at']));
+      this.rooms.unshift(new Room(data['room_id'], data['users'], '', data['created_at']));
       this.changeRoom(this.rooms[0]);
     }, (err: Response) => {
       if (err.status === 301) {
-        this.changeRoom(this.rooms.filter(r => r.id === err.json()['room_id'])[0]);
+        this.changeRoom(this.findRoomById(err.json()['room_id']));
       } else {
         return err;
       }

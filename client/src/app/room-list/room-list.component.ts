@@ -23,7 +23,6 @@ export class RoomListComponent implements OnInit {
       data: { usernames: '' } // TODO: prepare multi user chat
     });
     dialogRef.afterClosed().subscribe(data => {
-      console.log(data);
       this.chat.makeRoom([data]);
     });
   }

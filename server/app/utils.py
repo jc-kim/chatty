@@ -122,3 +122,10 @@ def initialize_jwt(jwt, app):
     jwt.identity_handler(_jwt_identity)
     jwt.auth_response_handler(_jwt_auth_response_handler)
     jwt.init_app(app)
+
+
+def update_room_in_sockets(room: Room):
+    from app.views.chat import sockets
+    user_ids = [u.id for u in room.users]
+    for socket in (s for s in sockets if s.user_id in user_ids):
+        socket.rooms.append(room.id)
