@@ -25,6 +25,13 @@
     font-weight: bold;
 }
 
+.last-log {
+    max-width: 20rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 .last-log-at {
     font-weight: lighter;
 }

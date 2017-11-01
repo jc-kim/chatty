@@ -3,15 +3,13 @@
     <div class="content">
         <p class="nickname" [innerHTML]="chat.nickname" *ngIf="!isMine"></p>
         <div class="bubble-container">
-            <p class="date mine" *ngIf="isMine">{{ chat.created_at | date:'short' }}</p>
+            <p class="date mine" *ngIf="isMine">{{ chat.created_at | localDate:'short' }}</p>
             <div class="talk-bubble round tri-right" [class.right-top]="isMine" [class.left-top]="!isMine" [class.mine]="isMine">
                 <div class="talktext">
-                    <p>
-                        {{chat.message}}
-                    </p>
+                    <p>{{chat.message}}</p>
                 </div>
             </div>
-            <p class="date" *ngIf="!isMine">{{ chat.created_at | date:'short' }}</p>
+            <p class="date" *ngIf="!isMine">{{ chat.created_at | localDate:'short' }}</p>
         </div>
     </div>
 </div>

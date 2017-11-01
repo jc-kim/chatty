@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { MatFormFieldModule, MatInputModule, MatButtonModule, MatDialogModule, MatRadioModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -20,6 +20,7 @@ import { ChatWindowComponent } from './chat-window/chat-window.component';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { AddMessageBoxComponent } from './add-message-box/add-message-box.component';
 import { NewRoomDialogComponent } from './new-room-dialog/new-room-dialog.component';
+import { LocalDatePipe } from './_pipes/local-date.pipe';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { NewRoomDialogComponent } from './new-room-dialog/new-room-dialog.compon
     ChatWindowComponent,
     ChatMessageComponent,
     AddMessageBoxComponent,
-    NewRoomDialogComponent
+    NewRoomDialogComponent,
+    LocalDatePipe
   ],
   imports: [
     BrowserModule,
@@ -50,7 +52,8 @@ import { NewRoomDialogComponent } from './new-room-dialog/new-room-dialog.compon
     AuthenticationService,
     AuthOnly,
     ChatService,
-    SocketService
+    SocketService,
+    { provide: LOCALE_ID, useValue: 'ko-KR'}
   ],
   bootstrap: [AppComponent],
   entryComponents: [

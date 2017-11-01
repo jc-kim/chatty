@@ -6,6 +6,14 @@
     height: 15vh;
     border-bottom: 1px solid black;
     box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    flex-flow: row wrap;
+    align-content: center;
+}
+
+.header>* {
+    height: 2.5em;
 }
 
 .body {

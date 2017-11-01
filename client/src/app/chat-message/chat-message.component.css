@@ -7,6 +7,7 @@ p.nickname {
 
 .talk-bubble {
     margin: 0 0 0 1.5rem;
+    word-wrap: normal;
 }
 
 .talk-bubble.mine {

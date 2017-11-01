@@ -1,9 +1,9 @@
 <div class="room" [class.selected]="room === chat.cur_room" (click)="select();">
     <div>
         <span class="partner">{{roomName()}}</span>
-        <span class="last-log-at">{{ room.last_log_at | date:'short' }}</span>
+        <span class="last-log-at">{{ room.last_log_at | localDate:'short' }}</span>
     </div>
     <div>
-        <span class="last-log">{{room.last_log}}</span>
+        <p class="last-log">{{room.last_log}}</p>
     </div>
 </div>
