@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import anchorme from 'anchorme';
 import * as autolink from 'autolinker';
 
 @Pipe({
