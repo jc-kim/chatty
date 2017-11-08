@@ -10,7 +10,7 @@ export class ChatWindowComponent implements OnInit, AfterViewChecked {
   @Input() nickname: string;
   @ViewChild('chatList') private chatListElem: ElementRef;
 
-  constructor(private chat: ChatService) { }
+  constructor(public chat: ChatService) { }
 
   ngOnInit() {
     this.scrollToBottom();

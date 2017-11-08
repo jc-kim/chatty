@@ -11,7 +11,7 @@ import { Room } from '../_models/room';
   styleUrls: ['./room-list.component.css']
 })
 export class RoomListComponent implements OnInit {
-  constructor(private chat: ChatService, private dialog: MatDialog) { }
+  constructor(public chat: ChatService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.chat.getRoomList();

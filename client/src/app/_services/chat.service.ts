@@ -10,7 +10,7 @@ import { AppSetting } from '../app.settings';
 @Injectable()
 export class ChatService {
   public rooms: Room[];
-  private cur_room: Room;
+  public cur_room: Room;
   private connection;
 
   constructor(private http: Http, private socket: SocketService) {

@@ -10,7 +10,7 @@ import { ChatService } from '../_services/chat.service';
 export class RoomComponent implements OnInit {
   @Input() room: Room;
 
-  constructor(private chat: ChatService) { }
+  constructor(public chat: ChatService) { }
 
   ngOnInit() {
   }
